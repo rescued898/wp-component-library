@@ -11,10 +11,10 @@ some classes like is-active and m-is-active, were left
 
 ```
 var options = {
-  tabContent: 	'.tab-content',
-	tabsList: 		'.tab-list',
-	tabLinks: 		'.tab-list li > a',
-	activeTab: 	 	'.tab-list li',
-	tabItem: 	  	'.tab-item'
+  tabContent:   '.tab-content',
+	tabsList:     '.tab-list',
+	tabLinks:     '.tab-list li > a',
+	activeTab:    '.tab-list li',
+	tabItem:      '.tab-item'
 }
 ```
