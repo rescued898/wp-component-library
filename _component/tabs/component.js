@@ -26,6 +26,46 @@
 			return;
 		}
 
+		// Object.assign polyfill
+		if (typeof Object.assign != 'function') {
+			// Must be writable: true, enumerable: false, configurable: true
+			Object.defineProperty(Object, "assign", {
+			  value: function assign(target, varArgs) { // .length of function is 2
+				'use strict';
+				if (target == null) { // TypeError if undefined or null
+				  throw new TypeError('Cannot convert undefined or null to object');
+				}
+		  
+				var to = Object(target);
+		  
+				for (var index = 1; index < arguments.length; index++) {
+				  var nextSource = arguments[index];
+		  
+				  if (nextSource != null) { // Skip over if undefined or null
+					for (var nextKey in nextSource) {
+					  // Avoid bugs when hasOwnProperty is shadowed
+					  if (Object.prototype.hasOwnProperty.call(nextSource, nextKey)) {
+						to[nextKey] = nextSource[nextKey];
+					  }
+					}
+				  }
+				}
+				return to;
+			  },
+			  writable: true,
+			  configurable: true
+			});
+		  }
+
+		var defaults = {
+			tabContent: 	'.tab-content',
+			tabsList: 		'.tab-list',
+			tabLinks: 		'.tab-list li > a',
+			activeTab: 		'.tab-list li',
+			tabItem: 		'.tab-item'
+		}
+		options = Object.assign(defaults, options);
+
 		var tabs = document.querySelectorAll( options.target );
 
 		// Simple forEach to make iteration easier
@@ -37,13 +77,13 @@
 
 		forEach( tabs, function( index, value ) {
 
-			var tabContent   = tabs[index].querySelectorAll( '.tab-content' ),
-				tabsList     = tabs[index].querySelectorAll( '.tab-list' ),
-				tabLinks     = tabs[index].querySelectorAll( '.tab-list li > a' ),
-				activeTab    = tabs[index].querySelectorAll( '.tab-list li' );
+			var tabContent   = tabs[index].querySelectorAll( options.tabContent ),
+				tabsList     = tabs[index].querySelectorAll( options.tabsList ),
+				tabLinks     = tabs[index].querySelectorAll( options.tabLinks ),
+				activeTab    = tabs[index].querySelectorAll( options.activeTab );
 
 			// Set state for the first .tab-item
-			var firstTab = tabs[index].querySelectorAll( '.tab-item' );
+			var firstTab = tabs[index].querySelectorAll( options.tabItem );
 			firstTab[0].classList.add( 'is-active' );
 
 			forEach( tabLinks, function( index, value ) {
